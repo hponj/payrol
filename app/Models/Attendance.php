@@ -42,4 +42,24 @@ class Attendance extends Model
         return $hours . ' jam ' . $minutes . ' menit';
         
     }
+
+    protected static function booted()
+    {
+        static::saving(function ($attendance){
+            if ($attendance->start_time && $attendance->end_time){
+
+                $startTime = Carbon::parse($attendance->start_time);
+                $endTime = Carbon::parse($attendance->end_time);
+
+                if ($endTime->lessThan($startTime)){
+                    $endTime->addDay();
+                }
+
+                $totalSecond = $startTime->diffInSeconds($endTime);
+
+                $attendance->duration = gmdate('H:i:s', $totalSecond);
+
+            }
+        });
+    }
 }

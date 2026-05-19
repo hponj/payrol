@@ -51,6 +51,10 @@ class AttendancesTable
                     ->label('End Time')
                     ->time()
                     ->sortable(),
+                TextColumn::make('duration')
+                    ->label('Duration')
+                    ->time()
+                    ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

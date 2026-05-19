@@ -1,37 +1,36 @@
 <?php
 
-namespace App\Filament\Resources\Schedules\Tables;
+namespace App\Filament\Resources\Leaves\Tables;
 
-use App\Models\Schedules;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Tables\Columns\BooleanColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\Auth;
 
-class SchedulesTable
+class LeavesTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
                 TextColumn::make('user.name')
-                    ->label('Employee')
                     ->searchable(),
-                BooleanColumn::make('is_wfa')
-                    ->label('WFA'),
-                TextColumn::make('shift.name')
-                    ->description(fn (Schedules $record): string => $record->shift->start_time . ' - ' . $record->shift->end_time)
-                    ->searchable(),
-                TextColumn::make('office.name')
-                    ->searchable(),
-                ToggleColumn::make('is_banned')
-                    ->label('is Banned')
-                    ->hidden(fn () => !Auth::user()->hasRole('super_admin')),
+                TextColumn::make('start_date')
+                    ->date()
+                    ->sortable(),
+                TextColumn::make('end_date')
+                    ->date()
+                    ->sortable(),
+                TextColumn::make('status')
+                        ->badge()
+                        ->color(fn (string $state): string => match ($state) {
+                            'draft' => 'gray',
+                            'pending' => 'warning',
+                            'approved' => 'success',
+                            'rejected' => 'danger',
+                        }),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -40,7 +39,6 @@ class SchedulesTable
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                
             ])
             ->filters([
                 //

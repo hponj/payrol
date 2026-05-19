@@ -42,10 +42,7 @@ class SchedulesForm
                             ->label('WFA')
                             ->onIcon(Heroicon::Home)
                             ->offIcon(Heroicon::BuildingOffice2),
-                        Toggle::make('is_banned')
-                            ->label('is Banned')
-                            ->onIcon(Heroicon::Check)
-                            ->offIcon(Heroicon::XMark),
+                        
                     ])
                 ]),
             ]);
